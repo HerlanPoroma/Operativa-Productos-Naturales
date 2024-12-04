@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Proyecto</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="Free HTML Templates" name="keywords">
+    <meta content="Free HTML Templates" name="description">
+    <!-- Favicon -->
+    <link href="img/favicon.ico" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">  
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="lib/animate/animate.min.css" rel="stylesheet">
+    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+
+    <!-- Customized CSS -->
+    <link href="css/style.css" rel="stylesheet">
+</head>
+
+<body>
+    <!-- Topbar Start -->
+    <div class="container-fluid">
+        <div class="row align-items-center bg-light py-3 px-xl-5 d-none d-lg-flex">
+            <div class="col-lg-4">
+                <a href="" class="text-decoration-none">
+                    <span class="h1 text-uppercase text-primary bg-dark px-2">Productos</span>
+                    <span class="h1 text-uppercase text-dark bg-primary px-2 ml-n1">Naturales</span>
+                </a>
+            </div>
+        </div>
+    </div>
+    <!-- Topbar End -->
+
+    <!-- Navbar Start -->
+    <div class="container-fluid bg-dark mb-30">
+        <div class="row px-xl-5">
+            <div class="col-lg-12">
+                <nav class="navbar navbar-expand-lg bg-dark navbar-dark py-3 py-lg-0 px-0">
+                    <a href="#" class="text-decoration-none d-block d-lg-none">
+                        <span class="h1 text-uppercase text-dark bg-light px-2">Productos</span>
+                        <span class="h1 text-uppercase text-light bg-primary px-2 ml-n1">Naturales</span>
+                    </a>
+                    <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
+                        <div class="navbar-nav mr-auto py-0">
+                            <a href="index.html" class="nav-item nav-link active">Principal</a>
+                            <a href="Marco Teorico.html" class="nav-item nav-link">Marco Teorico</a>
+                            <a href="Marco Practico.html" class="nav-item nav-link">Marco Practico</a>
+                            <a href="Conclusiones.html" class="nav-item nav-link">Conclusiones</a>
+                            <a href="calculadora.html.html" class="nav-item nav-link">Calculadora</a>
+                            <a href="Biografia.html" class="nav-item nav-link">Biografía</a>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </div>
+    <!-- Navbar End -->
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    input[type="number"], select {
+      width: 100px;
+      padding: 5px;
+      margin: 5px;
+    }
+    button {
+      padding: 10px 20px;
+      margin: 10px 0;
+      cursor: pointer;
+      font-size: 16px;
+      background-color: #007BFF;
+      color: white;
+      border: none;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    .resultados {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Calculadora Simplex</h1>
+    <div class="form-group">
+      <label for="tipo">Tipo de Optimización:</label>
+      <select id="tipo">
+        <option value="max">Maximizar</option>
+        <option value="min">Minimizar</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>Función Objetivo:</label>
+      <div id="objetivo-container">
+        <!-- Los Coefs se agregarán aquí -->
+      </div>
+      <button id="add-variable">Agregar Variable</button>
+    </div>
+
+    <div class="form-group">
+      <label>Restricciones:</label>
+      <div id="restricciones-container">
+        <!-- Las restricciones se agregarán aquí -->
+      </div>
+      <button id="add-restriccion">Agregar Restricción</button>
+    </div>
+
+    <button id="calcular">Calcular</button>
+
+    <div class="resultados" id="resultados">
+      <!-- Resultados del cálculo se mostrarán aquí -->
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      // Inicializar con 2 Coefs para la función objetivo
+      const objetivoContainer = document.getElementById("objetivo-container");
+      let numVariables = 2; // Inicializamos con 2 variables: x1, x2
+
+      // Crear los Coefs iniciales de la función objetivo
+      for (let i = 1; i <= numVariables; i++) {
+        const input = document.createElement("input");
+        input.type = "number";
+        input.placeholder = `Coef x${i}`;
+        objetivoContainer.appendChild(input);
+      }
+
+      // Agregar nueva variable en la función objetivo
+      document.getElementById("add-variable").addEventListener("click", () => {
+        numVariables++;
+
+        // Agregar nueva entrada para el Coef
+        const newVariable = document.createElement("input");
+        newVariable.type = "number";
+        newVariable.placeholder = `Coef x${numVariables}`;
+        objetivoContainer.appendChild(newVariable);
+
+        // Agregar la nueva variable en todas las restricciones
+        const restricciones = document.querySelectorAll("#restricciones-container .restriccion");
+        restricciones.forEach(restriccion => {
+          const newCoef = document.createElement("input");
+          newCoef.type = "number";
+          newCoef.placeholder = `Coef x${numVariables}`;
+          restriccion.insertBefore(newCoef, restriccion.querySelector("select"));
+        });
+      });
+
+      // Agregar nueva restricción
+      document.getElementById("add-restriccion").addEventListener("click", () => {
+        const container = document.getElementById("restricciones-container");
+        let inputsHtml = "";
+
+        // Agregar un Coef por cada variable
+        for (let i = 1; i <= numVariables; i++) {
+          inputsHtml += `<input type="number" placeholder="Coef x${i}">`;
+        }
+
+        // Crear la restricción
+        const newRestriccion = document.createElement("div");
+        newRestriccion.className = "restriccion";
+        newRestriccion.innerHTML = `
+          ${inputsHtml}
+          <select>
+            <option value="<=">≤</option>
+            <option value="=">=</option>
+            <option value=">=">≥</option>
+          </select>
+          <input type="number" placeholder="Valor límite">
+        `;
+        container.appendChild(newRestriccion);
+      });
+
+      // Calcular resultados usando el método Simplex
+      document.getElementById("calcular").addEventListener("click", () => {
+        const tipo = document.getElementById("tipo").value;
+        const CoefsObjetivo = [...document.querySelectorAll("#objetivo-container input")]
+            .map(input => parseFloat(input.value) || 0);
+    
+        const restricciones = [...document.querySelectorAll(".restriccion")].map(row => {
+            const Coefs = [...row.querySelectorAll("input[type='number']")]
+                .map(input => parseFloat(input.value) || 0);
+            const signo = row.querySelector("select").value;
+            return { Coefs: Coefs.slice(0, -1), signo, valor: Coefs[Coefs.length - 1] };
+        });
+    
+        // Llamar al método Simplex
+        const resultado = simplex(tipo, CoefsObjetivo, restricciones);
+    
+        // Mostrar resultados
+        const resultadosDiv = document.getElementById("resultados");
+    
+        // Crear un nuevo bloque para el resultado
+        const resultadoHTML = document.createElement("div");
+        resultadoHTML.innerHTML = `
+            <p><strong>Valor Óptimo:</strong> ${resultado.valorOptimo}</p>
+            <p><strong>Valores de las Variables:</strong> ${resultado.valores.map((v, i) => `x${i + 1} = ${v}`).join(", ")}</p>
+            <hr>
+        `;
+    
+        // Añadir el bloque al contenedor
+        resultadosDiv.appendChild(resultadoHTML);
+    });
+    
+
+      // Método Simplex
+      function simplex(tipo, objetivo, restricciones) {
+        const numVariables = objetivo.length;
+        const numRestricciones = restricciones.length;
+
+        // Crear tabla inicial
+        const tableau = restricciones.map(r => [...r.Coefs, ...Array(numRestricciones).fill(0), r.valor]);
+        tableau.forEach((fila, i) => (fila[numVariables + i] = 1));
+        const zRow = [...objetivo.map(c => (tipo === "max" ? -c : c)), ...Array(numRestricciones + 1).fill(0)];
+        tableau.push(zRow);
+
+        // Iterar hasta que no haya valores negativos en la fila Z
+        while (Math.min(...zRow.slice(0, numVariables + numRestricciones)) < 0) {
+          const colPivote = zRow.indexOf(Math.min(...zRow.slice(0, numVariables + numRestricciones)));
+
+          let filaPivote = -1;
+          let menorRatio = Infinity;
+          for (let i = 0; i < numRestricciones; i++) {
+            const ratio = tableau[i][colPivote] > 0 ? tableau[i][numVariables + numRestricciones] / tableau[i][colPivote] : Infinity;
+            if (ratio < menorRatio) {
+              menorRatio = ratio;
+              filaPivote = i;
+            }
+          }
+
+          // Hacer pivotaje
+          const pivote = tableau[filaPivote][colPivote];
+          for (let j = 0; j < tableau[0].length; j++) tableau[filaPivote][j] /= pivote;
+          for (let i = 0; i < tableau.length; i++) {
+            if (i !== filaPivote) {
+              const factor = tableau[i][colPivote];
+              for (let j = 0; j < tableau[0].length; j++) tableau[i][j] -= factor * tableau[filaPivote][j];
+            }
+          }
+        }
+
+        // Obtener solución
+        const valores = Array(numVariables).fill(0);
+        for (let j = 0; j < numVariables; j++) {
+          const columna = tableau.map(fila => fila[j]);
+          if (columna.filter(v => v === 1).length === 1 && columna.includes(1)) {
+            const fila = columna.indexOf(1);
+            valores[j] = tableau[fila][numVariables + numRestricciones];
+          }
+        }
+
+        const valorOptimo = tableau[tableau.length - 1][numVariables + numRestricciones];
+        return { valores, valorOptimo };
+      }
+    });
+  </script>
+</body>
+</html>
